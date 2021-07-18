@@ -1,52 +1,36 @@
 class Controller:
-    """
-    Класс Controller моделирует контроллер, т. е. реализует определённые функции для управления калькулятором (ввод
-    значений и отправка данных в модель).
-    """
+    """Class Controller simulates some functions to operate the calculator."""
+
+    # Variables for creating commands.
+    DIGITS = '0123456789'
+    OPERATIONS = '+'
+    RESULT = '='
 
     def __init__(self, model):
-        """
-        Метод инициализирует атрибуты:
-        1) __model - модель калькулятора (класс Model);
-        2) __view - вид калькулятора (класс View) - изначально None.
-        """
 
-        self.__model = model
-        self.__view = None
+        # Connect the model and the view.
+        self.model = model
+        self.view = None
 
     def set_view(self, view):
-        """
-        Присуждает переменной __view инициализированный экземпляр класса View.
-        """
+        """Establish a connection between the view and the controller (because the view will be created a bit later."""
 
-        self.__view = view
+        self.view = view
 
-    @staticmethod
-    def input_number(num=1):
-        """
-        Метод выполняет проверку корректности введённого числа.
-        """
+    def digit_button(self, digit):
+        """Create a command for a digit button."""
 
-        num = 'первое' if num == 1 else 'второе'
-        while True:
-            number = input('Введите ' + num + ' число: ')
-            try:
-                number = int(number)
-                break
-            except ValueError:
-                try:
-                    number = float(number)
-                    break
-                except ValueError:
-                    print('Вы ввели некорректное число. Попробуйте ещё раз!')
-        return number
+        if self.view.result == '0':
+            self.view.result = digit
+        else:
+            self.view.result += digit
 
-    def calc_add(self):
-        """
-        Метод выполняет ввод значений и отправляет их модели (вызывает соответствующий метод) для расчёта суммы.
-        """
+    def set_command(self, text):
+        """Create a command."""
 
-        print('Введите значения для расчёта суммы:')
-        a = self.input_number()
-        b = self.input_number(2)
-        self.__model.add(a, b)
+        if text in Controller.DIGITS:
+            return lambda: self.digit_button(text)
+        if text in Controller.OPERATIONS:
+            pass
+        if text == Controller.RESULT:
+            pass
